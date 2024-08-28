@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhanced Privacy No Ads YouTube Link Generator For Schools</title>
+    <style>
+        :root {
+            --bg-color: #ffffff;
+            --text-color: #333333;
+            --button-bg: #4CAF50;
+            --button-text: #ffffff;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            transition: background-color 0.3s, color 0.3s;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        .dark-mode {
+            --bg-color: #333333;
+            --text-color: #ffffff;
+            --button-bg: #45a049;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        #linkGenerator {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: var(--button-bg);
+            color: var(--button-text);
+            border: none;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        #result {
+            margin-top: 20px;
+            word-break: break-all;
+        }
+
+        #videoContainer {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 1000;
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        #darkModeToggle {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+
+        #closeVideo {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            z-index: 1001;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <button id="darkModeToggle">Toggle Dark Mode</button>
+    <h1>Enhanced Privacy No Ads YouTube Link Generator For Schools</h1>
+    <div id="linkGenerator">
+        <input type="text" id="youtubeUrl" placeholder="Enter YouTube URL">
+        <button onclick="generateLink()">Generate Enhanced Link</button>
+        <div id="result"></div>
+        <button id="openVideo" style="display: none;">Open Video</button>
+    </div>
+    <div id="videoContainer">
+        <iframe id="videoFrame" allowfullscreen></iframe>
+    </div>
+    <button id="closeVideo">Close Video</button>
+
+    <script>
+        function generateLink() {
+            const url = document.getElementById('youtubeUrl').value;
+            const videoId = extractVideoId(url);
+            if (videoId) {
+                const enhancedLink = `https://www.youtube-nocookie.com/embed/${videoId}`;
+                document.getElementById('result').innerHTML = `Link Created: <a href='${enhancedLink}'>${enhancedLink}</a>`;
+                document.getElementById('openVideo').style.display = 'block';
+            } else {
+                document.getElementById('result').innerText = 'Invalid YouTube URL';
+                document.getElementById('openVideo').style.display = 'none';
+            }
+        }
+
+        function extractVideoId(url) {
+            const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+            const match = url.match(regExp);
+            return (match && match[2].length === 11) ? match[2] : null;
+        }
+
+        document.getElementById('openVideo').addEventListener('click', function() {
+            const videoId = extractVideoId(document.getElementById('youtubeUrl').value);
+            if (videoId) {
+                const enhancedLink = `https://www.youtube-nocookie.com/embed/${videoId}`;
+                document.getElementById('videoFrame').src = enhancedLink;
+                document.getElementById('videoContainer').style.display = 'block';
+                document.getElementById('closeVideo').style.display = 'block';
+                document.body.style.overflow = 'hidden';
+                hideAllExceptVideo();
+            }
+        });
+
+        document.getElementById('closeVideo').addEventListener('click', function() {
+            document.getElementById('videoContainer').style.display = 'none';
+            document.getElementById('closeVideo').style.display = 'none';
+            document.body.style.overflow = 'auto';
+            showAllElements();
+        });
+
+        function hideAllExceptVideo() {
+            document.querySelectorAll('body > *:not(#videoContainer):not(#closeVideo)').forEach(el => {
+                el.style.display = 'none';
+            });
+        }
+
+        function showAllElements() {
+            document.querySelectorAll('body > *').forEach(el => {
+                el.style.display = '';
+            });
+            document.getElementById('openVideo').style.display = 'block';
+        }
+
+        // Dark mode toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+
+        function setDarkMode(isDark) {
+            body.classList.toggle('dark-mode', isDark);
+            localStorage.setItem('darkMode', isDark);
+        }
+
+        // Check for saved dark mode preference
+        const savedDarkMode = localStorage.getItem('darkMode');
+        if (savedDarkMode !== null) {
+            setDarkMode(savedDarkMode === 'true');
+        }
+
+        darkModeToggle.addEventListener('click', () => {
+            setDarkMode(!body.classList.contains('dark-mode'));
+        });
+    </script>
+</body>
+</html>
